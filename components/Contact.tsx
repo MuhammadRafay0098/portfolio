@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {
-  Mail,
   Phone,
   Github,
   Linkedin,
@@ -22,6 +21,13 @@ export default function Contact() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  // Generate WhatsApp direct chat link using the phone number
+  const whatsappUrl =
+    SOCIAL.whatsapp ||
+    `https://wa.me/${SOCIAL.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+      "Hi Muhammad Rafay, I saw your portfolio and would like to connect!",
+    )}`;
 
   return (
     <section
@@ -50,16 +56,26 @@ export default function Contact() {
               {copied ? "Email Copied!" : SOCIAL.email}
             </button>
 
-            {/* Smooth Phone Button */}
+            {/* Direct WhatsApp Redirect Phone Button */}
             <a
-              href={`tel:${SOCIAL.phone.replace(/\s+/g, "")}`}
-              className="px-6 py-3 rounded-full font-medium text-sm border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-accent-teal hover:text-accent-teal hover:bg-accent-teal/5 transition-all duration-300 ease-out hover:scale-105 active:scale-95 flex items-center gap-2"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Contact on WhatsApp"
+              className="px-6 py-3 rounded-full font-medium text-sm border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-emerald-500/50 hover:text-emerald-400 hover:bg-emerald-500/5 transition-all duration-300 ease-out hover:scale-105 active:scale-95 flex items-center gap-2 group"
             >
-              <Phone size={16} /> {SOCIAL.phone}
+              <Phone
+                size={16}
+                className="group-hover:text-emerald-400 transition-colors duration-300"
+              />
+              <span>{SOCIAL.phone}</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 ml-1">
+                WhatsApp
+              </span>
             </a>
           </div>
 
-          {/* Social Links with Smooth Hover & Micro-animations */}
+          {/* Social Links */}
           <div className="flex justify-center gap-6 text-sm text-slate-400">
             <a
               href={SOCIAL.github}

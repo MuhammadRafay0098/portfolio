@@ -18,6 +18,8 @@ export const SOCIAL = {
   twitter: "https://x.com/Muhammadrafay92",
   email: "rafay9363@gmail.com",
   phone: "+92 309 0945092",
+  whatsapp:
+    "https://wa.me/923090945092?text=Hi%20Muhammad%20Rafay,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!",
 };
 
 export const SKILLS: Record<string, string[]> = {
