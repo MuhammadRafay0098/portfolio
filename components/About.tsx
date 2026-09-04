@@ -37,7 +37,7 @@ export default function About() {
                 Driven by clean code & user-centric design.
               </h3>
 
-              <div className="space-y-4 text-slate-300 leading-relaxed text-base">
+              <div className="space-y-4 text-slate-300 text-justify leading-relaxed text-base">
                 <p>
                   I recently graduated with a BS in Computer Science from Kohat
                   University of Science & Technology (CGPA 3.68). My primary

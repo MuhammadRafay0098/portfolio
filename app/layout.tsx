@@ -2,6 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://rafay.dev",
+  ),
   title: "Muhammad Rafay | Front-End & Next.js Engineer",
   description:
     "Portfolio of Muhammad Rafay — Computer Science Graduate & Front-End Developer specializing in React, Next.js, and modern Web Applications.",

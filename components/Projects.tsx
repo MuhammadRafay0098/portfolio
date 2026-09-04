@@ -69,7 +69,7 @@ export default function Projects() {
                   <h3 className="text-xl font-bold text-slate-100 group-hover:text-accent-teal transition-colors duration-300 mb-3">
                     {project.title}
                   </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  <p className="text-slate-400 text-sm text-justify leading-relaxed mb-6">
                     {project.description}
                   </p>
                 </div>
