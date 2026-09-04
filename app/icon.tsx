@@ -19,6 +19,7 @@ export default function Icon() {
         borderRadius: "8px",
         fontWeight: 700,
         fontFamily: "monospace",
+        
         border: "1px solid rgba(45, 212, 191, 0.3)",
       }}
     >

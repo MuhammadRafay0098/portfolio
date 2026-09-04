@@ -24,7 +24,8 @@ export default function Hero() {
       <motion.div className="absolute w-72 h-72 rounded-full blur-3xl opacity-30 top-10 -left-10 bg-accent-violet animate-floatSlow" />
       <motion.div className="absolute w-80 h-80 rounded-full blur-3xl opacity-20 bottom-0 right-0 bg-accent-teal animate-floatSlow2" />
 
-      <div className="relative max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      {/* Adjusted padding to px-4 sm:px-6 and centered content */}
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 items-center">
         <motion.div variants={container} initial="hidden" animate="show">
           <motion.p
             variants={item}
@@ -102,12 +103,14 @@ export default function Hero() {
           </motion.div>
         </motion.div>
 
+        {/* Code Box Container - Centered and Responsive */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+          className="w-full flex justify-center"
         >
-          <div className="rounded-2xl border border-slate-800 shadow-2xl overflow-hidden bg-surface">
+          <div className="w-full max-w-lg rounded-2xl border border-slate-800 shadow-2xl overflow-hidden bg-surface">
             <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-800">
               <span className="w-3 h-3 rounded-full bg-red-500/70" />
               <span className="w-3 h-3 rounded-full bg-yellow-500/70" />
@@ -116,7 +119,9 @@ export default function Hero() {
                 rafay.dev — profile.ts
               </span>
             </div>
-            <pre className="p-6 text-sm leading-relaxed font-mono overflow-x-auto">
+
+            {/* Adjusted padding (p-4 sm:p-6) & dynamic text sizes (text-xs sm:text-sm) */}
+            <pre className="p-4 sm:p-6 text-xs sm:text-sm leading-normal sm:leading-relaxed font-mono overflow-x-auto w-full">
               <code>
                 <span className="text-ink-muted">{"// muhammad rafay"}</span>
                 {"\n"}
