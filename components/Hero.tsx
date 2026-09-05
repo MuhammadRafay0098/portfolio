@@ -47,7 +47,7 @@ export default function Hero() {
           </motion.p>
           <motion.p
             variants={item}
-            className="text-slate-400 max-w-md mb-8 leading-relaxed text-sm min-[380px]:text-base"
+            className="!text-slate-300 max-w-md mb-8 leading-relaxed text-sm min-[380px]:text-base"
           >
             BS Computer Science graduate from KUST, focused on React and
             Next.js. I turn designs into responsive, production-ready interfaces
