@@ -31,8 +31,22 @@ const SUGGESTED_QUESTIONS = [
 
 const MAX_QUESTION_LENGTH = 500;
 
+const RATE_LIMIT_MESSAGE =
+  "You've reached the message limit for the moment. Please wait a little and try again.";
+
+const TEMPORARY_ERROR_MESSAGE =
+  "I couldn't reach the portfolio assistant right now. Please try again in a moment.";
+
 function createMessageId(): string {
   return crypto.randomUUID();
+}
+
+function createAssistantMessage(content: string): Message {
+  return {
+    id: createMessageId(),
+    role: "assistant",
+    content,
+  };
 }
 
 export default function PortfolioAssistant() {
@@ -101,34 +115,82 @@ export default function PortfolioAssistant() {
         }),
       });
 
-      const data = (await response.json()) as AssistantResponse;
+      let data: AssistantResponse;
 
+      try {
+        data = (await response.json()) as AssistantResponse;
+      } catch {
+        data = {};
+      }
+
+      /*
+       * Rate limit response.
+       *
+       * The API route returns HTTP 429 when the visitor
+       * exceeds the allowed number of requests.
+       */
+      if (response.status === 429) {
+        const retryAfter = response.headers.get("Retry-After");
+
+        const rateLimitContent = retryAfter
+          ? `You've reached the message limit for the moment. Please try again in about **${retryAfter} seconds**.`
+          : RATE_LIMIT_MESSAGE;
+
+        setMessages((currentMessages) => [
+          ...currentMessages,
+          createAssistantMessage(rateLimitContent),
+        ]);
+
+        return;
+      }
+
+      /*
+       * Other API errors.
+       *
+       * We intentionally avoid displaying raw backend errors
+       * unless they contain a safe user-facing message.
+       */
       if (!response.ok) {
-        throw new Error(data.error ?? "Unable to get a response.");
+        console.error(
+          "Portfolio assistant request failed:",
+          response.status,
+          data.error,
+        );
+
+        setMessages((currentMessages) => [
+          ...currentMessages,
+          createAssistantMessage(data.error?.trim() || TEMPORARY_ERROR_MESSAGE),
+        ]);
+
+        return;
       }
 
       if (!data.answer?.trim()) {
-        throw new Error("The assistant returned an empty response.");
+        console.error("Portfolio assistant returned an empty response.");
+
+        setMessages((currentMessages) => [
+          ...currentMessages,
+          createAssistantMessage(TEMPORARY_ERROR_MESSAGE),
+        ]);
+
+        return;
       }
 
-      const assistantMessage: Message = {
-        id: createMessageId(),
-        role: "assistant",
-        content: data.answer.trim(),
-      };
-
-      setMessages((currentMessages) => [...currentMessages, assistantMessage]);
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        createAssistantMessage(data.answer!.trim()),
+      ]);
     } catch (error) {
-      console.error("Portfolio assistant error:", error);
+      /*
+       * This normally represents a network failure rather
+       * than an error returned by the assistant API itself.
+       */
+      console.error("Portfolio assistant network error:", error);
 
-      const errorMessage: Message = {
-        id: createMessageId(),
-        role: "assistant",
-        content:
-          "I couldn't reach the portfolio assistant right now. Please try again in a moment.",
-      };
-
-      setMessages((currentMessages) => [...currentMessages, errorMessage]);
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        createAssistantMessage(TEMPORARY_ERROR_MESSAGE),
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -184,11 +246,9 @@ export default function PortfolioAssistant() {
               rounded-2xl
               border border-slate-700/70
               bg-slate-950/95
-              shadow-2xl
-              shadow-black/50
+              shadow-2xl shadow-black/50
               backdrop-blur-xl
-              sm:right-6
-              sm:w-[400px]
+              sm:right-6 sm:w-[400px]
             "
             aria-label="Rafay AI portfolio assistant"
           >
@@ -205,30 +265,23 @@ export default function PortfolioAssistant() {
               "
             />
 
+            {/* Header */}
             <header
               className="
                 relative
-                flex items-center
-                justify-between
-                border-b
-                border-slate-800
+                flex items-center justify-between
+                border-b border-slate-800
                 bg-slate-900/80
                 px-4 py-3
               "
             >
-              <div
-                className="
-                  flex min-w-0
-                  items-center gap-3
-                "
-              >
+              <div className="flex min-w-0 items-center gap-3">
                 {/* Header bot avatar */}
                 <div
                   className="
                     relative flex
                     size-10 shrink-0
-                    items-center
-                    justify-center
+                    items-center justify-center
                   "
                 >
                   <div
@@ -243,35 +296,26 @@ export default function PortfolioAssistant() {
                   <div
                     className="
                       relative flex
-                      size-10 items-center
-                      justify-center
+                      size-10
+                      items-center justify-center
                       rounded-xl
-                      border
-                      border-teal-400/20
+                      border border-teal-400/20
                       bg-gradient-to-br
                       from-teal-400/15
                       via-cyan-400/10
                       to-violet-500/15
                     "
                   >
-                    <Bot
-                      className="
-                        size-5
-                        text-teal-300
-                      "
-                      aria-hidden="true"
-                    />
+                    <Bot className="size-5 text-teal-300" aria-hidden="true" />
                   </div>
 
                   <span
                     className="
                       absolute
-                      -bottom-0.5
-                      -right-0.5
+                      -bottom-0.5 -right-0.5
                       size-3
                       rounded-full
-                      border-2
-                      border-slate-900
+                      border-2 border-slate-900
                       bg-teal-400
                       shadow-[0_0_8px_rgba(45,212,191,0.9)]
                     "
@@ -279,17 +323,11 @@ export default function PortfolioAssistant() {
                 </div>
 
                 <div className="min-w-0">
-                  <div
-                    className="
-                      flex items-center
-                      gap-2
-                    "
-                  >
+                  <div className="flex items-center gap-2">
                     <h2
                       className="
                         truncate
-                        text-sm
-                        font-semibold
+                        text-sm font-semibold
                         text-slate-100
                       "
                     >
@@ -299,14 +337,11 @@ export default function PortfolioAssistant() {
                     <span
                       className="
                         inline-flex
-                        items-center
-                        gap-1.5
+                        items-center gap-1.5
                         rounded-full
-                        border
-                        border-teal-400/10
+                        border border-teal-400/10
                         bg-teal-400/5
-                        px-1.5
-                        py-0.5
+                        px-1.5 py-0.5
                         text-[9px]
                         font-semibold
                         uppercase
@@ -346,8 +381,7 @@ export default function PortfolioAssistant() {
                   rounded-lg
                   p-2
                   text-slate-500
-                  transition-all
-                  duration-200
+                  transition-all duration-200
                   hover:bg-slate-800
                   hover:text-slate-100
                   focus-visible:outline-none
@@ -399,19 +433,14 @@ export default function PortfolioAssistant() {
                           mt-1
                           flex size-7
                           shrink-0
-                          items-center
-                          justify-center
+                          items-center justify-center
                           rounded-lg
-                          border
-                          border-teal-400/10
+                          border border-teal-400/10
                           bg-teal-400/10
                         "
                       >
                         <Bot
-                          className="
-                            size-4
-                            text-teal-300
-                          "
+                          className="size-4 text-teal-300"
                           aria-hidden="true"
                         />
                       </div>
@@ -421,20 +450,16 @@ export default function PortfolioAssistant() {
                       className={`
                         max-w-[82%]
                         rounded-2xl
-                        px-3.5
-                        py-2.5
-                        text-sm
-                        leading-6
+                        px-3.5 py-2.5
+                        text-sm leading-6
                         ${
                           isAssistant
                             ? `
                               rounded-tl-md
-                              border
-                              border-slate-800
+                              border border-slate-800
                               bg-slate-900
                               text-slate-300
-                              shadow-sm
-                              shadow-black/20
+                              shadow-sm shadow-black/20
                             `
                             : `
                               rounded-tr-md
@@ -443,8 +468,7 @@ export default function PortfolioAssistant() {
                               to-cyan-500
                               font-medium
                               text-slate-950
-                              shadow-md
-                              shadow-teal-950/20
+                              shadow-md shadow-teal-950/20
                             `
                         }
                       `}
@@ -453,14 +477,7 @@ export default function PortfolioAssistant() {
                         <ReactMarkdown
                           components={{
                             p: ({ children }) => (
-                              <p
-                                className="
-                                  mb-2
-                                  last:mb-0
-                                "
-                              >
-                                {children}
-                              </p>
+                              <p className="mb-2 last:mb-0">{children}</p>
                             ),
 
                             strong: ({ children }) => (
@@ -509,8 +526,7 @@ export default function PortfolioAssistant() {
                                 className="
                                   rounded
                                   bg-slate-800
-                                  px-1.5
-                                  py-0.5
+                                  px-1.5 py-0.5
                                   font-mono
                                   text-xs
                                   text-teal-300
@@ -534,19 +550,14 @@ export default function PortfolioAssistant() {
                           mt-1
                           flex size-7
                           shrink-0
-                          items-center
-                          justify-center
+                          items-center justify-center
                           rounded-lg
-                          border
-                          border-violet-400/10
+                          border border-violet-400/10
                           bg-violet-400/10
                         "
                       >
                         <User
-                          className="
-                            size-4
-                            text-violet-300
-                          "
+                          className="size-4 text-violet-300"
                           aria-hidden="true"
                         />
                       </div>
@@ -576,32 +587,22 @@ export default function PortfolioAssistant() {
                     className="
                       mt-1
                       flex size-7
-                      items-center
-                      justify-center
+                      items-center justify-center
                       rounded-lg
-                      border
-                      border-teal-400/10
+                      border border-teal-400/10
                       bg-teal-400/10
                     "
                   >
-                    <Bot
-                      className="
-                        size-4
-                        text-teal-300
-                      "
-                      aria-hidden="true"
-                    />
+                    <Bot className="size-4 text-teal-300" aria-hidden="true" />
                   </div>
 
                   <div
                     className="
                       flex
-                      items-center
-                      gap-2
+                      items-center gap-2
                       rounded-2xl
                       rounded-tl-md
-                      border
-                      border-slate-800
+                      border border-slate-800
                       bg-slate-900
                       px-4 py-3
                       text-sm
@@ -634,22 +635,11 @@ export default function PortfolioAssistant() {
                   transition={{
                     delay: 0.15,
                   }}
-                  className="
-                    space-y-2.5
-                    pt-1
-                  "
+                  className="space-y-2.5 pt-1"
                 >
-                  <div
-                    className="
-                      flex items-center
-                      gap-1.5
-                    "
-                  >
+                  <div className="flex items-center gap-1.5">
                     <Sparkles
-                      className="
-                        size-3
-                        text-violet-400
-                      "
+                      className="size-3 text-violet-400"
                       aria-hidden="true"
                     />
 
@@ -666,13 +656,7 @@ export default function PortfolioAssistant() {
                     </p>
                   </div>
 
-                  <div
-                    className="
-                      flex
-                      flex-wrap
-                      gap-2
-                    "
-                  >
+                  <div className="flex flex-wrap gap-2">
                     {SUGGESTED_QUESTIONS.map((question) => (
                       <button
                         key={question}
@@ -682,27 +666,23 @@ export default function PortfolioAssistant() {
                           void sendQuestion(question);
                         }}
                         className="
-                            rounded-full
-                            border
-                            border-slate-700
-                            bg-slate-900/80
-                            px-3
-                            py-1.5
-                            text-left
-                            text-xs
-                            text-slate-300
-                            transition-all
-                            duration-200
-                            hover:-translate-y-0.5
-                            hover:border-teal-400/40
-                            hover:bg-teal-400/5
-                            hover:text-teal-200
-                            hover:shadow-md
-                            hover:shadow-teal-950/30
-                            disabled:
-                            cursor-not-allowed
-                            disabled:opacity-50
-                          "
+                          rounded-full
+                          border border-slate-700
+                          bg-slate-900/80
+                          px-3 py-1.5
+                          text-left
+                          text-xs
+                          text-slate-300
+                          transition-all duration-200
+                          hover:-translate-y-0.5
+                          hover:border-teal-400/40
+                          hover:bg-teal-400/5
+                          hover:text-teal-200
+                          hover:shadow-md
+                          hover:shadow-teal-950/30
+                          disabled:cursor-not-allowed
+                          disabled:opacity-50
+                        "
                       >
                         {question}
                       </button>
@@ -718,8 +698,7 @@ export default function PortfolioAssistant() {
             <form
               onSubmit={handleSubmit}
               className="
-                border-t
-                border-slate-800
+                border-t border-slate-800
                 bg-slate-950/95
                 p-3
               "
@@ -727,20 +706,14 @@ export default function PortfolioAssistant() {
               <div
                 className="
                   flex
-                  items-end
-                  gap-2
+                  items-end gap-2
                   rounded-xl
-                  border
-                  border-slate-700
+                  border border-slate-700
                   bg-slate-900
-                  px-3
-                  py-2
-                  transition-all
-                  duration-200
-                  focus-within:
-                  border-teal-400/60
-                  focus-within:
-                  shadow-[0_0_0_3px_rgba(45,212,191,0.06)]
+                  px-3 py-2
+                  transition-all duration-200
+                  focus-within:border-teal-400/60
+                  focus-within:shadow-[0_0_0_3px_rgba(45,212,191,0.06)]
                 "
               >
                 <textarea
@@ -763,10 +736,8 @@ export default function PortfolioAssistant() {
                     text-sm
                     text-slate-100
                     outline-none
-                    placeholder:
-                    text-slate-500
-                    disabled:
-                    cursor-not-allowed
+                    placeholder:text-slate-500
+                    disabled:cursor-not-allowed
                   "
                   aria-label="Ask Rafay AI a question"
                 />
@@ -791,8 +762,7 @@ export default function PortfolioAssistant() {
                   className="
                     flex size-9
                     shrink-0
-                    items-center
-                    justify-center
+                    items-center justify-center
                     rounded-lg
                     bg-gradient-to-br
                     from-teal-400
@@ -801,19 +771,14 @@ export default function PortfolioAssistant() {
                     shadow-md
                     shadow-teal-500/10
                     transition-opacity
-                    disabled:
-                    cursor-not-allowed
-                    disabled:
-                    opacity-40
+                    disabled:cursor-not-allowed
+                    disabled:opacity-40
                   "
                   aria-label="Send question"
                 >
                   {isLoading ? (
                     <LoaderCircle
-                      className="
-                        size-4
-                        animate-spin
-                      "
+                      className="size-4 animate-spin"
                       aria-hidden="true"
                     />
                   ) : (
@@ -826,20 +791,13 @@ export default function PortfolioAssistant() {
                 className="
                   mt-2
                   flex
-                  items-center
-                  justify-between
+                  items-center justify-between
                   px-1
                   text-[10px]
                   text-slate-600
                 "
               >
-                <span
-                  className="
-                    flex
-                    items-center
-                    gap-1
-                  "
-                >
+                <span className="flex items-center gap-1">
                   <Sparkles className="size-2.5" aria-hidden="true" />
                   Answers grounded in Rafay&apos;s portfolio
                 </span>
@@ -861,12 +819,10 @@ export default function PortfolioAssistant() {
       <div
         className="
           fixed
-          bottom-5
-          right-4
+          bottom-5 right-4
           z-50
           flex
-          items-center
-          gap-3
+          items-center gap-3
           sm:right-6
         "
       >
@@ -896,16 +852,12 @@ export default function PortfolioAssistant() {
               }}
               className="
                 hidden
-                items-center
-                gap-2
+                items-center gap-2
                 rounded-full
-                border
-                border-slate-700/80
+                border border-slate-700/80
                 bg-slate-900/95
-                px-4
-                py-2.5
-                shadow-xl
-                shadow-black/30
+                px-4 py-2.5
+                shadow-xl shadow-black/30
                 backdrop-blur-xl
                 transition-colors
                 hover:border-teal-400/30
@@ -914,13 +866,7 @@ export default function PortfolioAssistant() {
               aria-label="Open Rafay AI assistant"
             >
               <div>
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-1.5
-                  "
-                >
+                <div className="flex items-center gap-1.5">
                   <span
                     className="
                       text-xs
@@ -941,22 +887,13 @@ export default function PortfolioAssistant() {
                   />
                 </div>
 
-                <p
-                  className="
-                    mt-0.5
-                    text-[9px]
-                    text-slate-500
-                  "
-                >
+                <p className="mt-0.5 text-[9px] text-slate-500">
                   Portfolio assistant
                 </p>
               </div>
 
               <Sparkles
-                className="
-                  size-3.5
-                  text-violet-400
-                "
+                className="size-3.5 text-violet-400"
                 aria-hidden="true"
               />
             </motion.button>
@@ -971,11 +908,9 @@ export default function PortfolioAssistant() {
                 aria-hidden="true"
                 className="
                   pointer-events-none
-                  absolute
-                  -inset-2
+                  absolute -inset-2
                   rounded-full
-                  border
-                  border-teal-400/25
+                  border border-teal-400/25
                 "
                 animate={{
                   scale: [1, 1.16, 1],
@@ -992,8 +927,7 @@ export default function PortfolioAssistant() {
                 aria-hidden="true"
                 className="
                   pointer-events-none
-                  absolute
-                  -inset-3
+                  absolute -inset-3
                   rounded-full
                   bg-gradient-to-br
                   from-teal-400/25
@@ -1006,7 +940,9 @@ export default function PortfolioAssistant() {
 
           <motion.button
             type="button"
-            onClick={() => setIsOpen((current) => !current)}
+            onClick={() => {
+              setIsOpen((current) => !current);
+            }}
             whileHover={{
               scale: 1.08,
               y: -2,
@@ -1022,12 +958,10 @@ export default function PortfolioAssistant() {
             className="
               relative
               flex size-14
-              items-center
-              justify-center
+              items-center justify-center
               overflow-hidden
               rounded-full
-              border
-              border-white/20
+              border border-white/20
               bg-gradient-to-br
               from-teal-400
               via-cyan-400
@@ -1036,30 +970,24 @@ export default function PortfolioAssistant() {
               shadow-[0_0_24px_rgba(45,212,191,0.35)]
               outline-none
               transition-shadow
-              hover:
-              shadow-[0_0_32px_rgba(45,212,191,0.55)]
-              focus-visible:
-              ring-2
-              focus-visible:
-              ring-teal-300
-              focus-visible:
-              ring-offset-2
-              focus-visible:
-              ring-offset-slate-950
+              hover:shadow-[0_0_32px_rgba(45,212,191,0.55)]
+              focus-visible:ring-2
+              focus-visible:ring-teal-300
+              focus-visible:ring-offset-2
+              focus-visible:ring-offset-slate-950
             "
             aria-label={
               isOpen ? "Close Rafay AI assistant" : "Open Rafay AI assistant"
             }
             aria-expanded={isOpen}
           >
-            {/* subtle highlight */}
+            {/* Subtle highlight */}
             <span
               aria-hidden="true"
               className="
                 pointer-events-none
                 absolute
-                inset-x-2
-                top-1
+                inset-x-2 top-1
                 h-px
                 bg-white/50
                 blur-[1px]
@@ -1115,15 +1043,11 @@ export default function PortfolioAssistant() {
                   className="
                     relative
                     flex
-                    items-center
-                    justify-center
+                    items-center justify-center
                   "
                 >
                   <Bot
-                    className="
-                      size-7
-                      drop-shadow-sm
-                    "
+                    className="size-7 drop-shadow-sm"
                     strokeWidth={2.2}
                     aria-hidden="true"
                   />
@@ -1131,12 +1055,10 @@ export default function PortfolioAssistant() {
                   <span
                     className="
                       absolute
-                      -right-1
-                      -top-1
+                      -right-1 -top-1
                       size-2
                       rounded-full
-                      border
-                      border-white/70
+                      border border-white/70
                       bg-white
                       shadow-[0_0_7px_rgba(255,255,255,0.9)]
                     "
