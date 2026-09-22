@@ -6,6 +6,7 @@ import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import PortfolioAssistant from "@/components/PortfolioAssistant";
 
 export default function Home() {
   return (
@@ -30,6 +31,8 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      <PortfolioAssistant />
     </div>
   );
 }

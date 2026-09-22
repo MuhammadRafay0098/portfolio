@@ -1,0 +1,82 @@
+{
+  "version": "2.0",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_dimension": 384,
+  "similarity": "cosine",
+  "chunking_strategy": "semantic-section",
+  "total_chunks": 12,
+  "chunks": [
+    {
+      "id": 0,
+      "section": "Identity and Professional Profile",
+      "text": "Name\nMuhammad Rafay\nLocation\nKohat, Pakistan\nDegree\nBS Computer Science, Kohat University of Science and Technology (KUST), 2026\nAcademic CGPA\n3.68\nProfessional focus\nFront-End Developer, React and Next.js Engineer, and builder of AI-powered web\napplications.\nCareer status\nOpen to opportunities.\nProfessional summary\nMuhammad Rafay is a Computer Science graduate focused on building modern,\nresponsive, performant web applications. His primary front-end stack includes React.js,\nNext.js, TypeScript, Tailwind CSS, JavaScript, HTML5, and CSS3. He also works with\nAPIs, Firebase, Supabase, deployment platforms, and AI integrations.",
+      "embedding_text": "Identity and Professional Profile. General biography, professional identity, career focus, location, availability and professional summary of Muhammad Rafay. Name\nMuhammad Rafay\nLocation\nKohat, Pakistan\nDegree\nBS Computer Science, Kohat University of Science and Technology (KUST), 2026\nAcademic CGPA\n3.68\nProfessional focus\nFront-End Developer, React and Next.js Engineer, and builder of AI-powered web\napplications.\nCareer status\nOpen to opportunities.\nProfessional summary\nMuhammad Rafay is a Computer Science graduate focused on building modern,\nresponsive, performant web applications. His primary front-end stack includes React.js,\nNext.js, TypeScript, Tailwind CSS, JavaScript, HTML5, and CSS3. He also works with\nAPIs, Firebase, Supabase, deployment platforms, and AI integrations."
+    },
+    {
+      "id": 1,
+      "section": "Education",
+      "text": "Institution\nKohat University of Science and Technology (KUST)\nDegree\nBachelor of Science in Computer Science\nGraduation year\n2026\nCGPA\n3.68\nAcademic focus\nComputer Science with practical work in modern web development, APIs, databases,\nand AI-powered applications.",
+      "embedding_text": "Education. Muhammad Rafay education, university, KUST, Computer Science degree, graduation year, academic background and CGPA. Institution\nKohat University of Science and Technology (KUST)\nDegree\nBachelor of Science in Computer Science\nGraduation year\n2026\nCGPA\n3.68\nAcademic focus\nComputer Science with practical work in modern web development, APIs, databases,\nand AI-powered applications."
+    },
+    {
+      "id": 2,
+      "section": "Technical Skills",
+      "text": "Frontend\nReact.js; Next.js; TypeScript; Tailwind CSS; JavaScript; HTML5 / CSS3\nData and APIs\nFirebase; Supabase; REST APIs\nTools and deployment\nGit / GitHub; Vercel; Netlify\nProductivity tools\nMS Word; MS Excel; PowerPoint\n\nAI integration\nExperience integrating Groq API based language models into web applications,\nincluding AI recommendation functionality.",
+      "embedding_text": "Technical Skills. Muhammad Rafay technical skills, programming languages, frontend technologies, frameworks, React, Next.js, TypeScript, JavaScript, Tailwind CSS, APIs, Firebase, Supabase, Git and deployment tools. Frontend\nReact.js; Next.js; TypeScript; Tailwind CSS; JavaScript; HTML5 / CSS3\nData and APIs\nFirebase; Supabase; REST APIs\nTools and deployment\nGit / GitHub; Vercel; Netlify\nProductivity tools\nMS Word; MS Excel; PowerPoint\n\nAI integration\nExperience integrating Groq API based language models into web applications,\nincluding AI recommendation functionality."
+    },
+    {
+      "id": 3,
+      "section": "Project: NutriSmart",
+      "text": "Type\nFinal Year Project\nDescription\nAn AI-based personalized diet and fitness planner. It is a full-stack application with an\nAI recommendation engine that generates tailored nutrition and fitness plans.\nTechnology\nReact.js; Tailwind CSS; Firebase; Groq API\nAI model noted in\nportfolio\nLlama 3.3-70B through the Groq API\nRelevant capability\nDemonstrates experience connecting a web interface and application data with an\nexternal large language model API.",
+      "embedding_text": "Project: NutriSmart. NutriSmart final year project, AI diet and fitness application, Groq API, Llama model, Firebase, React and AI development experience. Type\nFinal Year Project\nDescription\nAn AI-based personalized diet and fitness planner. It is a full-stack application with an\nAI recommendation engine that generates tailored nutrition and fitness plans.\nTechnology\nReact.js; Tailwind CSS; Firebase; Groq API\nAI model noted in\nportfolio\nLlama 3.3-70B through the Groq API\nRelevant capability\nDemonstrates experience connecting a web interface and application data with an\nexternal large language model API."
+    },
+    {
+      "id": 4,
+      "section": "Project: Roiser E-commerce",
+      "text": "Type\nWeb App\nDescription\nA modern e-commerce storefront designed for smooth product browsing and checkout\nflows.\nTechnology\nReact.js; Redux Toolkit; Tailwind CSS; React Router; React Query; REST API\nDeployment\nVercel\nLive URL\nhttps://roiser-ecommerce-by-mr.vercel.app/",
+      "embedding_text": "Project: Roiser E-commerce. Roiser E-commerce project, React storefront, Redux Toolkit, React Query, REST API and frontend development. Type\nWeb App\nDescription\nA modern e-commerce storefront designed for smooth product browsing and checkout\nflows.\nTechnology\nReact.js; Redux Toolkit; Tailwind CSS; React Router; React Query; REST API\nDeployment\nVercel\nLive URL\nhttps://roiser-ecommerce-by-mr.vercel.app/"
+    },
+    {
+      "id": 5,
+      "section": "Project: The Wild Oasis",
+      "text": "Type\nAdmin Dashboard\nDescription\nA cabin and hotel booking management dashboard for staff to manage bookings,\nguests, and cabins.\nTechnology\nReact.js; Supabase; React Query\nLive URL\nhttps://wild-oasis-by-m-r.vercel.app/",
+      "embedding_text": "Project: The Wild Oasis. The Wild Oasis project, hotel and cabin management dashboard, React, Supabase and React Query. Type\nAdmin Dashboard\nDescription\nA cabin and hotel booking management dashboard for staff to manage bookings,\nguests, and cabins.\nTechnology\nReact.js; Supabase; React Query\nLive URL\nhttps://wild-oasis-by-m-r.vercel.app/"
+    },
+    {
+      "id": 6,
+      "section": "Project: Forkify",
+      "text": "Type\nWeb App\nDescription\nA recipe search and bookmarking application where users can search recipes, adjust\nservings, and save favorites.\n\nTechnology\nJavaScript; REST API\nLive URL\nhttps://forkify-mr09.netlify.app/",
+      "embedding_text": "Project: Forkify. Forkify project, JavaScript recipe application, recipe search, bookmarks and REST API. Type\nWeb App\nDescription\nA recipe search and bookmarking application where users can search recipes, adjust\nservings, and save favorites.\n\nTechnology\nJavaScript; REST API\nLive URL\nhttps://forkify-mr09.netlify.app/"
+    },
+    {
+      "id": 7,
+      "section": "Professional Experience: Uzair Tech",
+      "text": "Role\nFront-End Developer\nOrganization\nUzair Tech (Software House)\nDuration\n5 months\nResponsibilities\nBuilt and maintained responsive user interfaces using React.js and modern front-end\ntooling. Collaborated with the development team to translate designs into functional,\nproduction-ready pages.",
+      "embedding_text": "Professional Experience: Uzair Tech. Muhammad Rafay professional work experience, employment, frontend developer experience, Uzair Tech, React development, software house, responsibilities and duration. Role\nFront-End Developer\nOrganization\nUzair Tech (Software House)\nDuration\n5 months\nResponsibilities\nBuilt and maintained responsive user interfaces using React.js and modern front-end\ntooling. Collaborated with the development team to translate designs into functional,\nproduction-ready pages."
+    },
+    {
+      "id": 8,
+      "section": "Additional Experience",
+      "text": "Role\nAcademic Content and Composing Specialist / Tutor\nOrganization\nIdeal Public School and Private Tutoring, Kohat\nDuration\nApproximately 5 years, part-time\nResponsibilities\nComposed, formatted, and designed structured examination papers and academic\nlayouts using MS Word, Excel, and PowerPoint. Tutored students across multiple\nsubjects while managing curriculum schedules and academic commitments.\nSkills developed\nCommunication, document layout, organization, and time management.",
+      "embedding_text": "Additional Experience. Muhammad Rafay tutoring, academic work, Ideal Public School, document preparation, MS Office and communication experience. Role\nAcademic Content and Composing Specialist / Tutor\nOrganization\nIdeal Public School and Private Tutoring, Kohat\nDuration\nApproximately 5 years, part-time\nResponsibilities\nComposed, formatted, and designed structured examination papers and academic\nlayouts using MS Word, Excel, and PowerPoint. Tutored students across multiple\nsubjects while managing curriculum schedules and academic commitments.\nSkills developed\nCommunication, document layout, organization, and time management."
+    },
+    {
+      "id": 9,
+      "section": "Development Approach",
+      "text": "UI engineering\nFocuses on turning requirements and designs into clean, interactive, responsive user\ninterfaces.\nAPI work\nHas experience integrating REST APIs and working with application data.\nState and data handling\nHas worked with state-management and data-fetching tools including Redux Toolkit\nand React Query.\nQuality focus\nValues clean code, responsive design, maintainability, performance, and\nproduction-ready interfaces.\nAI-powered web\ndevelopment\nInterested in combining modern web engineering with practical AI capabilities.",
+      "embedding_text": "Development Approach. Muhammad Rafay software development approach, UI engineering, clean code, APIs, state management, performance and maintainability. UI engineering\nFocuses on turning requirements and designs into clean, interactive, responsive user\ninterfaces.\nAPI work\nHas experience integrating REST APIs and working with application data.\nState and data handling\nHas worked with state-management and data-fetching tools including Redux Toolkit\nand React Query.\nQuality focus\nValues clean code, responsive design, maintainability, performance, and\nproduction-ready interfaces.\nAI-powered web\ndevelopment\nInterested in combining modern web engineering with practical AI capabilities."
+    },
+    {
+      "id": 10,
+      "section": "Current Portfolio Technology",
+      "text": "Framework\nNext.js\n\nUI\nReact and Tailwind CSS\nLanguage\nTypeScript\nAnimation\nFramer Motion\nIcons\nLucide React\nDesign direction\nDark developer-oriented interface using slate tones with teal and violet accents,\nresponsive layouts, subtle motion, and accessibility considerations.",
+      "embedding_text": "Current Portfolio Technology. Technology used to build Muhammad Rafay portfolio website, Next.js, React, TypeScript, Tailwind CSS, Framer Motion and Lucide. Framework\nNext.js\n\nUI\nReact and Tailwind CSS\nLanguage\nTypeScript\nAnimation\nFramer Motion\nIcons\nLucide React\nDesign direction\nDark developer-oriented interface using slate tones with teal and violet accents,\nresponsive layouts, subtle motion, and accessibility considerations."
+    },
+    {
+      "id": 11,
+      "section": "Professional Links and Contact",
+      "text": "GitHub\nhttps://github.com/MuhammadRafay0098\nLinkedIn\nhttps://www.linkedin.com/in/muhammad-rafay-4761b0245/\nX / Twitter\nhttps://x.com/Muhammadrafay92\nEmail\nrafay9363@gmail.com\nPhone\n+92 309 0945092\nWhatsApp\nAvailable through the portfolio contact section.",
+      "embedding_text": "Professional Links and Contact. Contact Muhammad Rafay, email, phone, WhatsApp, LinkedIn, GitHub, Twitter and professional social profiles. GitHub\nhttps://github.com/MuhammadRafay0098\nLinkedIn\nhttps://www.linkedin.com/in/muhammad-rafay-4761b0245/\nX / Twitter\nhttps://x.com/Muhammadrafay92\nEmail\nrafay9363@gmail.com\nPhone\n+92 309 0945092\nWhatsApp\nAvailable through the portfolio contact section."
+    }
+  ]
+}
